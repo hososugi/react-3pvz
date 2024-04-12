@@ -5,8 +5,9 @@ export function Box({position=[1, 1, 1], rotation=[0, 0, 0], size=[1, 1, 1], col
     const meshRef = useRef();
     const [hovered, setHover] = useState(false);
     const [active, setActive] = useState(false);
+    const [width, height, depth] = size;
 
-    useFrame((state, delta) => (meshRef.current.rotation.x += delta));
+    useFrame((state, delta) => animation(state, delta, meshRef));
 
     return (
         <mesh 
@@ -15,12 +16,17 @@ export function Box({position=[1, 1, 1], rotation=[0, 0, 0], size=[1, 1, 1], col
             scale={active ? 1.5 : 1}
             onClick={(event) => setActive(!active)}
             onPointerOver={(event) => setHover(true)}
-            onPointerOut={(event) => setHover(false)}>
+            onPointerOut={(event) => setHover(false)}
+            castShadow={true}>
 
         <boxGeometry args={size} />
         <meshStandardMaterial color={hovered ? 'hotpink' : color} />
         </mesh>
     );
+}
+
+function animation(state, delta, meshRef) {
+    meshRef.current.rotation.x += delta;
 }
 
 export default Box
